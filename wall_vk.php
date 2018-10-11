@@ -36,7 +36,7 @@
 	$checkPost = $request->fetch();
 
 	if ($checkPost['count(id)']==0) {
-		// Добавление пользователя в таблицу users
+		// Добавление поста в таблицу posts
 		$addPost = $db->prepare('INSERT INTO `posts` (`id`, `signer_id`, `date`, `text`) VALUES (?, ?, ?, ?);');
 		$date += 10800;
 		$addPost->execute(array($wallGet['id'], $wallGet['signer_id'], $date, $wallGet['text']));
