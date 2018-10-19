@@ -44,6 +44,24 @@
 		echo "Такой пост существует"; //После тестов удалить
 	}
 
+	// Проверка: добавлялись ли данные фото в таблицу? Если нет, то добавить.
+	$request = $db->query('SELECT count(id) FROM attachments WHERE post_id ='. $post_id);
+	$request->setFetchMode(PDO::FETCH_ASSOC);
+	$checkAttachments = $request->fetch();
+
+	if ($checkAttachments['count(id)']==0) {
+		// Добавление ссылок на фотки в таблицу "attachments"
+		foreach ($attachments as &$value) {
+			$small_foto = $value['photo']['sizes']['3']['url'];
+			$big_foto = $value['photo']['sizes']['8']['url'];
+			$addAttachments = $db->prepare('INSERT INTO `attachments` (`id`, `post_id`, `small_foto`, `big_foto`) VALUES (NULL, ?, ?, ?);');
+			$addAttachments->execute(array($wallGet['id'], $small_foto, $big_foto));
+		}
+	} else {
+		echo "Такие фото существуют"; //После тестов удалить
+	}
+
+
 
 	// Test
 
