@@ -62,11 +62,10 @@
 	// Вывод постов
 	$request = $db->query('SELECT count(id) FROM posts'); // Подсчитываем количество постов
 	$checkPosts = $request->fetch();
-	$array = range(1, $checkPosts['count(id)']);	// Заполняем массив количеством постов
-	shuffle($array); // Перемешиваем массив
-	//$posts = range(1, $checkPosts['count(id)']);
+	$array_posts = range(1, $checkPosts['count(id)']);	// Заполняем массив количеством постов
+	shuffle($array_posts); // Перемешиваем массив
 
-	foreach (array_slice($array, 0, 10) as $id)		//Оставляем только 10 записей и выводим в этом цикле
+	foreach (array_slice($array_posts, 0, 10) as $id)		//Оставляем только 10 записей и выводим в этом цикле
 	{
 		// Выборка данных о посте и пользователе
 		$request = $db->query('SELECT posts.date, posts.text, users.user_id, users.first_name, users.last_name, 
@@ -82,14 +81,14 @@
 																		WHERE posts.post_id = attachments.post_id 
 																			and posts.id ='. $id);
 		$selectAll['0']['attachments'] = $request->fetchAll();
+		$selectAll['0']['amount_attachments'] = count($selectAll['0']['attachments']); // Подсчет количества приложений (фото)
 
-		$array[] = $selectAll['0']; // Заполняем массив постами
+		$posts[] = $selectAll['0']; // Заполняем массив постами
 	}
-	$array = array_slice($array, 6, 10); // Избавляемся от лишних ячеек в массиве (6 - временное число, заменить потом на 10)
 
 	// Test
 	echo "<pre>";
-	print_r($array);
+	print_r($posts);
 	echo "</pre>";
 
 	echo "<br>";
